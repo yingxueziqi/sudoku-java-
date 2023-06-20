@@ -1,0 +1,88 @@
+一、项目简介 
+本项目是一个数独游戏，可以生成新的数独游戏，也可以检查用户填写的数独是否正确。通过此项目，用户可以锻炼自己的逻辑思维能力和数学能力。 
+ 
+二、课程设计说明 
+开发此项目使用了Java语言，主要用到了Swing包下的JFrame、JPanel、JTextField、JButton等组件，自定义了SudokuGame类。没有用到数据库和文件技术。 
+ 
+三、小组分工 
+本项目由两个人共同完成，一号负责编写界面和逻辑代码，二号负责测试和调试代码，两人的工作量占比大致为6:4。 
+ 
+四、项目实现 
+流程图： 
+流程图 
+ 
+用例图： 
+用例图 
+ 
+实体属性图： 
+无 
+ 
+关键代码： 
+生成新游戏的代码： 
+ 
+Copy 
+private void newGame() { 
+    Random rand = new Random(); 
+    int[][] solution = {{1, 2, 3, 4}, {3, 4, 1, 2}, {2, 3, 4, 1}, {4, 1, 2, 3}}; 
+    int n = rand.nextInt(4); 
+    for (int i = 0; i < 4; i++) { 
+        for (int j = 0; j < 4; j++) { 
+            puzzle[i][j] = solution[(i+n)%4][j]; 
+            fixed[i][j] = rand.nextBoolean(); 
+            if (fixed[i][j]) { 
+                textFields[i][j].setText(String.valueOf(puzzle[i][j])); 
+            } else { 
+                textFields[i][j].setText(""); 
+                textFields[i][j].setEditable(true); 
+            } 
+            textFields[i][j].setBackground(Color.WHITE); 
+        } 
+    } 
+} 
+检查数独是否正确的代码： 
+ 
+Copy 
+private void check() { 
+    boolean[][] conflictRows = new boolean[4][5]; 
+    boolean[][] conflictCols = new boolean[4][5]; 
+    boolean[][] conflictBlocks = new boolean[4][5]; 
+ 
+    for (int i = 0; i < 4; i++) { 
+        for (int j = 0; j < 4; j++) { 
+            String str = textFields[i][j].getText(); 
+            if (!str.isEmpty()) { 
+                int num = Integer.parseInt(str); 
+                if (num < 1 || num > 4) { 
+                    textFields[i][j].setBackground(Color.RED); 
+                    return; 
+                } 
+                int block = i / 2 * 2 + j / 2; 
+                if (conflictRows[i][num]  conflictCols[j][num]  conflictBlocks[block][num]) { 
+                    textFields[i][j].setBackground(Color.RED); 
+                    return; 
+                } 
+                conflictRows[i][num] = conflictCols[j][num] = conflictBlocks[block][num] = true; 
+            } else if (fixed[i][j]) { 
+                textFields[i][j].setBackground(Color.WHITE); 
+            } else { 
+                textFields[i][j].setBackground(Color.YELLOW); 
+            } 
+        } 
+    } 
+ 
+    for (int i = 0; i < 4; i++) { 
+        for (int j = 0; j < 4; j++) { 
+            textFields[i][j].setEditable(false); 
+            textFields[i][j].setBackground(Color.GREEN); 
+        } 
+    } 
+} 
+五、程序运行结果截图 
+生成新游戏： 
+新游戏 
+ 
+检查结果： 
+检查结果 
+ 
+六、心得体会 
+通过此次课程设计，我们掌握了Java GUI编程的基本方法和技巧，同时也学会了如何使用Java数组进行数独游戏的生成和检查。在项目开发过程中，我们遇到了各种各样的问题，如界面美化、代码逻辑等，但通过不断地学习和尝试，最终完成了这个项目。在这个过程中，我们不仅学到了知识，还提高了自己的动手能力和解决问题的能力。
